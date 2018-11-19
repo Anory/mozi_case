@@ -34,7 +34,7 @@ def get_response(username):
                 "account": account,
                 "password": "123456"
             }
-            time.sleep(5)
+            time.sleep(3)
             # print(account)
             res = requests.post(url="http://api-robot.mozi.local/v1/user/login", data=data).json()
             name = res['data']['username']
