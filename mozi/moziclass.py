@@ -24,12 +24,16 @@ class RunMain:
 
 
 if __name__ == '__main__':
-    url = 'http://api-robot.mozi.local/v1/user/login'
+    url = "http://192.168.1.191:8181/mozi/v1/extract/coin/onExtractCoin"
     data = {
-        'account':'jies',
-        'password':'123456',
-        'device_id':'1',
-        'os_ver':'1'
+        'wallet_id': '969',
+        'wallet_address': 'BGeLDFoNKoAGecETkDZPvf3xkArpXRGK7e',
+        'wallet_name': '我的钱包',
+        'trade_num': '10',
+        'trade_password': '123456'
     }
-    run = RunMain(url, 'POST', data)
+    header = {
+        'token': '24ce68ffa9afddab639d7a6a6f010f16'
+    }
+    run = RunMain(url, 'POST', data, header)
     print(run.res)

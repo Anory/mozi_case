@@ -26,54 +26,59 @@ def get_name_list(sql):
         lists.append(",".join(list(i)))  # 将获取到的元组类型转换成列表类型
     return lists
 
-
 # 等待游戏开始
 def get_response(username):
+    count = 1
     for account in username:
-            data = {
-                "account": account,
-                "password": "123456"
-            }
-            time.sleep(3)
-            # print(account)
-            res = requests.post(url="http://api-robot.mozi.local/v1/user/login", data=data).json()
-            name = res['data']['username']
-            print("登录用户名=================》", name)
-            token = res['data']['token']
-            # print(token)
-            url = 'ws://10.0.3.21:19090/ws?token={0}'
-            count = 1
-            while True:  # 一直链接，直到连接上就退出循环
-                try:
-                    ws = create_connection(url.format(token))
-                    ws.send("{'i':1,'t':123456,'c':'joinRoom','d':{'detailId':1000}}")
-                    response = ws.recv()
-                    print(response)
-                    break
-                except Exception as e:
-                    time.sleep(2)
-                    print(token)
-                    print('连接异常：', e)
-                    continue
-            # while count < 6:
-            #     count += 1
-            #     print("aaa:", ws.recv())
+        data = {
+            "account": account,
+            "password": "123456"
+        }
+        # time.sleep(2)
+        # print(account)
+        res = requests.post(url="http://api-robot.mozi.local/v1/user/login", data=data).json()
+        name = res['data']['username']
+        print("登录用户名=================》", name)
+        token = res['data']['token']
+        # print(token)
+        url = 'ws://192.168.1.183:19090/ws?token={0}'
+        while True:  # 一直链接，直到连接上就退出循环
+            try:
+                ws = create_connection(url.format(token))
+                ws.send("{'i':1,'t':123456,'c':'joinRoom','d':{'detailId':1200}}")
+                response = ws.recv()
+                print(response)
+                break
+            except Exception as e:
+                time.sleep(2)
+                # print(token)
+                # print('连接异常：', e)
+                continue
+    while count == 6:
+        count += 1
+        time.sleep(20)
+        print("aaa:", ws.recv())
 
 
 
 if __name__ == "__main__":
-    sql = "SELECT username FROM user_info_kaicai WHERE id BETWEEN 650 AND 1000"
+    sql = "SELECT username FROM user_info_kaicai WHERE id BETWEEN 650 AND 800"
     # sql = "SELECT username FROM user_info_kaicai WHERE username in('mkij', 'jies')"
     name_list = get_name_list(sql)
     # run = get_response(name_list)
-    t_list = []
-    for i in range(1):
-        t1 = threading.Thread(target=get_response, args=(name_list,))
-        t_list.append(t1)
-    for t in t_list:
-        t.start()
-    for t in t_list:  # 等待所有线程完成
-        t.join()
+    # t_list = []
+    # for i in range(1):
+    #     # start_time = time.time()
+    #     # print(start_time)
+    #     t1 = threading.Thread(target=get_response, args=(name_list,))
+    #     t_list.append(t1)
+    # for t in t_list:
+    #     t.start()
+    # for t in t_list:  # 等待所有线程完成
+    #     t.join()
+    run = get_response(name_list)
+
+
 
 
 
